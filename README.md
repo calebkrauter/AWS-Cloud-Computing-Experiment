@@ -6,6 +6,9 @@ This project uses a Transform Load Query (TLQ) pipeline on a sample data set. It
 
 **Project General Info**
 
+TODO - Work on TypeScript code first, this is what the code in the other languages will be based on.
+TODO - Populate data/ with sample data from https://faculty.washington.edu/wlloyd/courses/tcss562/project/tlq/
+
 **- Phase 0 -**
  - **Project Proposal:** https://docs.google.com/document/d/1JIc_PNr8LclgPRjQRTpGsUu-nxE5lRtAEy843FvdusI/edit?usp=sharing
 
