@@ -4,6 +4,13 @@
     "mysql2": "^3.11.4"
   },
   "devDependencies": {
-    "@types/node": "^22.9.0"
+    "@types/node": "^22.9.0",
+    "typescript": "^5.2.2", 
+    "ts-node": "^10.9.1"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/transform.js",
+    "dev": "ts-node src/load.ts"
   }
 }
