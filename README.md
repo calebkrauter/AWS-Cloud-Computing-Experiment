@@ -15,3 +15,7 @@ TODO - Populate data/ with sample data from https://faculty.washington.edu/wlloy
 **- Phase 1 -**
 **- Phase 2 -**
 **- Phase 3 -**
+
+TS Dependencies:
+npm install csv-parser fs
+npm install -g ts-node
