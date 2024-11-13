@@ -1,13 +1,11 @@
-//File to store the query operations - in typescript
-//Project structure: When using other langauges, make new file of the same name.
-//Ensure code in new file does the ~exact same~ thing as this file
 import mysql from 'mysql2/promise'; // Using promise-based API for async/await
 
+// Define the database connection configuration once
 const dbConfig = {
-  host: 'localhost',         // Replace with MySQL host
-  user: 'Username',          // Replace with MySQL username
-  password: 'Password',      // Replace with MySQL password
-  database: 'Database'       // Replace with database name
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
 };
 
 // Function to fetch all data using SELECT *
@@ -37,6 +35,7 @@ export async function fetchData() {
     }
   }
 }
+
 // Function to fetch filtered data (e.g., by Item Type)
 export async function fetchFilteredData(itemType: string) {
   let connection;
@@ -52,6 +51,7 @@ export async function fetchFilteredData(itemType: string) {
   }
 }
 
+// Function to fetch aggregated data (e.g., total revenue by Item Type)
 export async function fetchAggregatedData() {
   let connection;
   try {
