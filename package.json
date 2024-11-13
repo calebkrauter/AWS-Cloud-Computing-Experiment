@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "mysql2": "^3.11.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "typescript": "^5.2.2", 
+    "ts-node": "^10.9.1"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/transform.js && node dist/load.js && node dist/query.js",
+    "dev": "ts-node src/typescript/transform.ts && ts-node src/typescript/load.ts && ts-node src/typescript/query.ts"
+  }
+}
