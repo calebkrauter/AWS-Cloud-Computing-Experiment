@@ -1,6 +1,10 @@
 import mysql from 'mysql2/promise'; // Using promise-based API for async/await
+import dotenv from 'dotenv';
 
-// Define the database connection configuration once
+// Load environment variables from .env file
+dotenv.config();
+
+// Database configuration (using .env values)
 const dbConfig = {
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -8,15 +12,19 @@ const dbConfig = {
   database: process.env.DB_NAME,
 };
 
-// Function to fetch all data using SELECT *
+// Function to fetch all data (joined from both Order and Item tables)
 export async function fetchData() {
   let connection;
   try {
-    // Establish connection
+    // Establish connection to the database
     connection = await mysql.createConnection(dbConfig);
 
-    // Execute the SELECT query
-    const [results, fields] = await connection.execute('SELECT * FROM sales_data');
+    // Query to select all data from both tables
+    const [results, fields] = await connection.execute(`
+      SELECT * 
+      FROM \`Order\` 
+      JOIN Item ON \`Order\`.Item_Type = Item.Item_Type;
+    `);
 
     // Log the retrieved data
     console.log('Data retrieved:');
@@ -30,35 +38,21 @@ export async function fetchData() {
     console.error('Error executing query', err);
   } finally {
     if (connection) {
-      // Close the connection
       await connection.end();
     }
   }
 }
 
-// Function to fetch filtered data (e.g., by Item Type)
-export async function fetchFilteredData(itemType: string) {
-  let connection;
-  try {
-    connection = await mysql.createConnection(dbConfig);
-    const [results, fields] = await connection.execute('SELECT * FROM sales_data WHERE Item_Type = ?', [itemType]);
-    console.log(`Filtered Data (Item_Type = ${itemType}):`);
-    console.log(results);
-  } catch (err) {
-    console.error('Error executing query', err);
-  } finally {
-    if (connection) await connection.end();
-  }
-}
-
-// Function to fetch aggregated data (e.g., total revenue by Item Type)
+// Function to fetch aggregated data (e.g., total revenue by item type)
 export async function fetchAggregatedData() {
   let connection;
   try {
     connection = await mysql.createConnection(dbConfig);
-    const [results, fields] = await connection.execute(
-      'SELECT Item_Type, SUM(Total_Revenue) AS Total_Revenue FROM sales_data GROUP BY Item_Type'
-    );
+    const [results, fields] = await connection.execute(`
+      SELECT Item.Item_Type, SUM(Item.Total_Revenue) AS Total_Revenue
+      FROM Item
+      GROUP BY Item.Item_Type;
+    `);
     console.log('Aggregated Data (Total Revenue by Item Type):');
     console.log(results);
   } catch (err) {
