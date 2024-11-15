@@ -5,7 +5,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.9.0",
-    "typescript": "^5.2.2", 
+    "typescript": "^5.2.2",
     "ts-node": "^10.9.1"
   },
   "scripts": {

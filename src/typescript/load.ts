@@ -1,16 +1,16 @@
-//File to store the load operations - in typescript
-//Project structure: When using other langauges, make new file of the same name.
-//Ensure code in new file does the ~exact same~ thing as this file
-
-//load data into a db
-
 import fs from 'fs';
 import path from 'path';
 import mysql from 'mysql2/promise';
 import dotenv from 'dotenv';
 
+const fs = require('fs');
+const path = require('path');
+const mysql = require('mysql2/promise');
+const dotenv = require('dotenv');
+
 // Load environment variables
 dotenv.config();
+
 
 const loadJSONtoDB = async () => {
   // Step 1: Read the transformed JSON file
@@ -63,6 +63,7 @@ const loadJSONtoDB = async () => {
       // Execute the query
       //Assumes no malicious SQL Injection
       await connection.execute(query, values);
+
     }
     console.log('Data loaded successfully!');
   } catch (error) {
@@ -107,3 +108,4 @@ loadJSONtoDB().catch(console.error);
 // };
 
 // loadCSVtoDB().catch(console.error);
+
