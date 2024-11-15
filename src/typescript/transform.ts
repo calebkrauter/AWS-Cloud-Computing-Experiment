@@ -18,7 +18,7 @@ const parseCSV = (filePath: string) => {
             results.push(filteredElement);
 
         }).on('end', () => {
-            writeFile('../data/transformed.json', JSON.stringify(results, null, 2));
+            writeFile('../../data/transformed_100_TS.json', JSON.stringify(results, null, 2));
             // Do parsing here.
         });
 
@@ -26,4 +26,4 @@ const parseCSV = (filePath: string) => {
 
 
 
-parseCSV('../data/100 Sales Records 2.csv');
+parseCSV('../../data/100 Sales Records.csv');
