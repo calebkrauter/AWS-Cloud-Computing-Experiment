@@ -23,11 +23,11 @@ const parseCSV = (filePath) => {
     fs.createReadStream(filePath)
         .pipe(csv())
         .on('data', (row) => {
-        const { Region, Country, 'Sales Channel': salesChannel, 'Ship Date': shipDate } = row, filteredElement = __rest(row, ["Region", "Country", 'Sales Channel', 'Ship Date']);
-        results.push(filteredElement);
-    }).on('end', () => {
-        (0, promises_1.writeFile)('data/100 Sales Records.csv', JSON.stringify(results, null, 2));
-        // Do parsing here.
-    });
+            const { Region, Country, 'Sales Channel': salesChannel, 'Ship Date': shipDate } = row, filteredElement = __rest(row, ["Region", "Country", 'Sales Channel', 'Ship Date']);
+            results.push(filteredElement);
+        }).on('end', () => {
+            (0, promises_1.writeFile)('data/100 Sales Records.csv', JSON.stringify(results, null, 2));
+            // Do parsing here.
+        });
 };
 parseCSV('../data/100 Sales Records.csv');
