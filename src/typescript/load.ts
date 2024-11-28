@@ -1,7 +1,7 @@
-import fs from 'fs';
-import path from 'path';
-import mysql from 'mysql2/promise';
-import dotenv from 'dotenv';
+// import fs from 'fs';
+// import path from 'path';
+// import mysql from 'mysql2/promise';
+// import dotenv from 'dotenv';
 
 const fs = require('fs');
 const path = require('path');
@@ -14,25 +14,54 @@ dotenv.config();
 
 const loadJSONtoDB = async () => {
   // Step 1: Read the transformed JSON file
-  const jsonFilePath = path.resolve(__dirname, '../../data/transformed100ts.json');
+  const jsonFilePath = path.resolve(__dirname, '../../data/transformed_100_ts.json');
   const jsonData = fs.readFileSync(jsonFilePath, 'utf-8');
   
   // Parse the JSON data
   const records = JSON.parse(jsonData); // Expects an array of objects
 
   // Step 2: Connect to the AWS RDS MySQL/MariaDB database
-  const connection = await mysql.createConnection({
+  console.log(process.env.DB_HOST);
+console.log(process.env.DB_USER);
+console.log(process.env.DB_PASSWORD);
+console.log(process.env.DB_NAME);
+console.log(process.env.DB_PORT);
+
+  const connection = await mysql.createConnection({ //This is causing the issue ECONNREFUSED
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
+    port: process.env.DB_PORT,
   });
 
   try {
     // Step 3: Insert records into the database
+    
+    const createQuery = `
+      CREATE DATABASE IF NOT EXISTS db;
+      USE db;
+      `;
+    //await connection.execute(createQuery);
+
+    const createTableQuery = `
+      CREATE TABLE sales (
+        item_type         VARCHAR(32)     NOT NULL        PRIMARY KEY,
+        order_priority    VARCHAR(1)      NOT NULL,
+        order_date        VARCHAR(32)     NOT NULL,
+        order_id          BIGINT          NOT NULL,
+        units_sold        BIGINT          NOT NULL,
+        unit_price        DECIMAL(10,2)   NOT NULL,
+        unit_cost         DECIMAL(10,2)   NOT NULL,
+        total_revenue     DECIMAL(10,2)     NOT NULL,
+        total_cost        DECIMAL(10,2)     NOT NULL,
+        total_profit      DECIMAL(10,2)     NOT NULL
+      );`;
+    //await connection.execute(createTableQuery);
+
     for (let record of records) {
       const query = `
-        INSERT INTO TableNameTBD (
+        INSERT INTO sales (
           item_type, 
           order_priority, 
           order_date, 
@@ -44,7 +73,7 @@ const loadJSONtoDB = async () => {
           total_cost, 
           total_profit
         ) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
       `;
       // Extract values from the record
       const values = [
