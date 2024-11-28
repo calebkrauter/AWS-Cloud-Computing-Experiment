@@ -12,44 +12,54 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 
-const loadJSONtoDB = async () => {
+export const loadJSONtoDB = async () => {
   // Step 1: Read the transformed JSON file
-  const jsonFilePath = path.resolve(__dirname, '../../data/transformed_100_ts.json');
+  //const jsonFilePath = path.resolve(__dirname, '../../data/transformed_100_TS.json');
+  const jsonFilePath = path.resolve(__dirname, 'transformed_100_TS.json');
   const jsonData = fs.readFileSync(jsonFilePath, 'utf-8');
-  
+  //const jsonData = fs.readFileSync('/Users/corey/Documents/School/462/project/AWS-Cloud-Computing-Experiment/data/transformed_100_TS.json', 'utf-8');
+
   // Parse the JSON data
   const records = JSON.parse(jsonData); // Expects an array of objects
 
   // Step 2: Connect to the AWS RDS MySQL/MariaDB database
   console.log(process.env.DB_HOST);
-console.log(process.env.DB_USER);
-console.log(process.env.DB_PASSWORD);
-console.log(process.env.DB_NAME);
-console.log(process.env.DB_PORT);
+  console.log(process.env.DB_USER);
+  console.log(process.env.DB_PASSWORD);
+  console.log(process.env.DB_NAME);
+  console.log(process.env.DB_PORT);
 
-  const connection = await mysql.createConnection({ //This is causing the issue ECONNREFUSED
+  const connection = await mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     port: process.env.DB_PORT,
   });
+  
+  console.log("connected to db successfully");
 
   try {
     // Step 3: Insert records into the database
     
+    // Forcefully restart the DB (DO NOT USE WITHOUT CERTAINTY)
+    const refresh = `
+    DROP DATABASE db
+    ;`;
+    await connection.execute(refresh);
+
     const createQuery = `
       CREATE DATABASE IF NOT EXISTS db;
-      USE db;
       `;
-    //await connection.execute(createQuery);
+    await connection.execute(createQuery);
+    await connection.changeUser({ database: 'db' }); // Preferred over `USE` in application code
 
     const createTableQuery = `
-      CREATE TABLE sales (
-        item_type         VARCHAR(32)     NOT NULL        PRIMARY KEY,
+      CREATE TABLE IF NOT EXISTS sales (
+        item_type         VARCHAR(32)     NOT NULL,
         order_priority    VARCHAR(1)      NOT NULL,
         order_date        VARCHAR(32)     NOT NULL,
-        order_id          BIGINT          NOT NULL,
+        order_id          BIGINT          NOT NULL    PRIMARY KEY,
         units_sold        BIGINT          NOT NULL,
         unit_price        DECIMAL(10,2)   NOT NULL,
         unit_cost         DECIMAL(10,2)   NOT NULL,
@@ -57,7 +67,7 @@ console.log(process.env.DB_PORT);
         total_cost        DECIMAL(10,2)     NOT NULL,
         total_profit      DECIMAL(10,2)     NOT NULL
       );`;
-    //await connection.execute(createTableQuery);
+    await connection.execute(createTableQuery);
 
     for (let record of records) {
       const query = `

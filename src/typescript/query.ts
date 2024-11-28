@@ -10,7 +10,7 @@ const dbConfig = {
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  port: process.env.DB_PORT,
+  port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : undefined, // Convert to number
 };
 
 // Function to fetch all data (joined from both Order and Item tables)
@@ -27,16 +27,17 @@ export async function fetchData() {
       JOIN Item ON \`Order\`.Item_Type = Item.Item_Type;
     `);
 
-    // Log the retrieved data
-    console.log('Data retrieved:');
-    console.log(results);
+    // Log the retrieved data (optional)
+    console.log('Data retrieved:', results);
 
-    // Log the field names
-    console.log('Field Names:');
-    fields.forEach(field => console.log(field.name));
+    // Return the data in JSON format
+    return { success: true, data: results };
 
   } catch (err) {
     console.error('Error executing query', err);
+
+    // Return an error message in JSON format
+    return { success: false, error: err.message };
   } finally {
     if (connection) {
       await connection.end();
@@ -48,17 +49,31 @@ export async function fetchData() {
 export async function fetchAggregatedData() {
   let connection;
   try {
+    // Establish connection to the database
     connection = await mysql.createConnection(dbConfig);
+
+    // Execute the query to aggregate data
     const [results, fields] = await connection.execute(`
       SELECT Item.Item_Type, SUM(Item.Total_Revenue) AS Total_Revenue
       FROM Item
       GROUP BY Item.Item_Type;
     `);
-    console.log('Aggregated Data (Total Revenue by Item Type):');
-    console.log(results);
+
+    // Log the aggregated data (optional)
+    console.log('Aggregated Data:', results);
+
+    // Return the aggregated data as JSON
+    return { success: true, data: results };
+
   } catch (err) {
     console.error('Error executing query', err);
+
+    // Return an error message in JSON format
+    return { success: false, error: err.message };
+
   } finally {
-    if (connection) await connection.end();
+    if (connection) {
+      await connection.end();
+    }
   }
 }

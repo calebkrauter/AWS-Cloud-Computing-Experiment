@@ -12,7 +12,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "node dist/transform.js && node dist/load.js && node dist/query.js",
+    "start": "node dist/typescript/transform.js && node dist/typescript/load.js && node dist/typescript/query.js",
     "dev": "ts-node src/typescript/transform.ts && ts-node src/typescript/load.ts && ts-node src/typescript/query.ts"
   }
 }
