@@ -1,3 +1,6 @@
+# Typescript Compiled Files
+*.js
+
 # Other files
 .DS_Store
 package-lock.json
