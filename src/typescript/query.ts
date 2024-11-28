@@ -37,7 +37,7 @@ export async function fetchData() {
     console.error('Error executing query', err);
 
     // Return an error message in JSON format
-    return { success: false, error: err.message };
+    return { success: false, error: err };
   } finally {
     if (connection) {
       await connection.end();
@@ -69,7 +69,7 @@ export async function fetchAggregatedData() {
     console.error('Error executing query', err);
 
     // Return an error message in JSON format
-    return { success: false, error: err.message };
+    return { success: false, error: err };
 
   } finally {
     if (connection) {
