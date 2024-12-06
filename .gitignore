@@ -4,6 +4,7 @@
 # Other files
 .DS_Store
 package-lock.json
+*.zip
 
 # Logs
 logs
