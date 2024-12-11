@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class load {
+public class Load {
 
     public static void main(String[] args) {
         try {
@@ -33,11 +33,12 @@ public class load {
         String dbPort = properties.get("DB_PORT");
 
         // Step 2: Read the transformed JSON file
-        String jsonFilePath = Paths.get("transformed_100_TS.json").toAbsolutePath().toString();
+        String jsonFilePath = Paths.get("data/transformed_100_TS.json").toAbsolutePath().toString();
         String jsonData = new String(Files.readAllBytes(Paths.get(jsonFilePath)));
         List<Map<String, Object>> records = parseJSON(jsonData);
 
         // Step 3: Connect to the AWS RDS MySQL/MariaDB database
+        //DriverManager.registerDriver(new Driver());
         String jdbcUrl = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName;
         try (Connection connection = DriverManager.getConnection(jdbcUrl, dbUser, dbPassword)) {
             System.out.println("Connected to database successfully");

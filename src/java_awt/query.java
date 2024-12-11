@@ -1,20 +1,25 @@
 package java_aws;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 
-public class query {
-
-    private static final String DB_HOST = "db1.cpuaoc8mi90.us-east-1.rds.amazonaws.com";
-    private static final String DB_USER = "admin";
-    private static final String DB_PASSWORD = "PassCode1";
-    private static final String DB_NAME = "db1";
-    private static final String DB_PORT = "3306";
-    // JDBC URL format for MySQL
-    private static final String DB_URL = "jdbc:mysql://" + DB_HOST + "/" + DB_NAME;
+public class Query {
+    // Database configuration (initialized in loadDB method)
+    private static String DB_HOST;
+    private static String DB_USER;
+    private static String DB_PASSWORD;
+    private static String DB_NAME;
+    private static String DB_PORT;
+    private static String DB_URL;
 
     // Method to fetch all data (joined from both Order and Item tables)
     public static void fetchData() {
@@ -28,7 +33,6 @@ public class query {
                 while (rs.next()) {
                     System.out.println("Order ID: " + rs.getInt("Order_ID"));
                     System.out.println("Item Type: " + rs.getString("Item_Type"));
-                    // Add more columns as needed
                 }
             }
         } catch (SQLException e) {
@@ -60,10 +64,61 @@ public class query {
         }
     }
 
+    // Method to load environment variables from a .env file
+    public static Map<String, String> loadEnv(String file) throws IOException {
+        Map<String, String> env = new HashMap<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (!line.trim().isEmpty() && line.contains("=")) {
+                    String[] parts = line.split("=", 2);
+                    env.put(parts[0].trim(), parts[1].trim());
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Error: .env file not found: " + e.getMessage());
+        }
+        return env;
+    }
+
+    // Method to load database credentials from the .env file
+    public static void loadDB() {
+        try {
+            Map<String, String> db = loadEnv("AWS-Cloud-Computing-Experiment/.env");
+            
+            // Print the values to debug
+            System.out.println("DB_HOST: " + db.get("DB_HOST"));
+            System.out.println("DB_USER: " + db.get("DB_USER"));
+            System.out.println("DB_PASSWORD: " + db.get("DB_PASSWORD"));
+            System.out.println("DB_NAME: " + db.get("DB_NAME"));
+            System.out.println("DB_PORT: " + db.get("DB_PORT"));
+            
+            DB_HOST = db.get("DB_HOST");
+            DB_USER = db.get("DB_USER");
+            DB_PASSWORD = db.get("DB_PASSWORD");
+            DB_NAME = db.get("DB_NAME");
+            DB_PORT = db.get("DB_PORT");
+    
+            // Make sure URL is properly formatted
+            DB_URL = "jdbc:mysql://" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME;
+            
+            // Print the final DB_URL to verify
+            System.out.println("DB_URL: " + DB_URL);
+            
+        } catch (IOException e) {
+            System.err.println("Error loading database configuration: " + e.getMessage());
+        }
+    }
+
     public static void main(String[] args) {
+        // Load database configuration
+        loadDB();
+
+        // Fetch all data
         System.out.println("Fetching All Data...");
         fetchData();
 
+        // Fetch aggregated data
         System.out.println("\nFetching Aggregated Data...");
         fetchAggregatedData();
     }

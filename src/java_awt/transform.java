@@ -4,13 +4,13 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.stream.*;
 
-public class transform {
+public class Transform {
 
     public static void main(String[] args) {
         try {
-            String filePath = Paths.get("../../data/100_Sales_Records.csv").toAbsolutePath().toString();
+            String filePath = Paths.get("data/100_Sales_Records.csv").toAbsolutePath().toString();
             parseCSV(filePath);
-            load.loadJSONtoDB(); // Assuming this is from your previous Java file
+            Load.loadJSONtoDB(); // Assuming this is from your previous Java file
             List<Map<String, Object>> result = fetchData();
 
             // Uncomment if you want aggregated data instead
@@ -50,7 +50,7 @@ public class transform {
                 results.add(record);
             }
 
-            Path outputPath = Paths.get("src/java/transformed_100_TS.json").toAbsolutePath();
+            Path outputPath = Paths.get("data/transformed_100_TS.json").toAbsolutePath();
             Files.writeString(outputPath, toJSONString(results));
 
         } catch (IOException e) {
