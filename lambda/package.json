@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "csv-parser": "^3.0.0",
+    "dotenv": "^16.4.5",
+    "fs": "^0.0.1-security",
+    "mysql2": "^3.11.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.2.2"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/typescript/transform.js && node dist/typescript/load.js && node dist/typescript/query.js",
+    "dev": "ts-node src/typescript/transform.ts && ts-node src/typescript/load.ts && ts-node src/typescript/query.ts"
+  }
+}
