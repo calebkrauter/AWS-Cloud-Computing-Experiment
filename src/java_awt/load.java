@@ -37,7 +37,7 @@ public class Load {
         System.out.println("port: " + dbPort);
 
         // Step 2: Read the transformed JSON file
-        String jsonFilePath = Paths.get("data/transformed_100_TS.json").toAbsolutePath().toString();
+        String jsonFilePath = Paths.get("/tmp/transformed_100_TS.json").toAbsolutePath().toString();
         String jsonData = new String(Files.readAllBytes(Paths.get(jsonFilePath)));
         List<Map<String, Object>> records = parseJSON(jsonData);
 
@@ -49,70 +49,63 @@ public class Load {
         try (Connection connection = DriverManager.getConnection(jdbcUrl, dbUser, "")) {
             System.out.println("Connected to database successfully");
 
-            Statement stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery("select * from users");
-
-            while(rs.next()) {
-                System.out.println(rs.getString("username"));
-            }
-
 
             // Step 4: Restart the database (Optional, use with caution)
-//            try (Statement statement = connection.createStatement()) {
-//                statement.execute("DROP DATABASE IF EXISTS db;");
-//                statement.execute("CREATE DATABASE IF NOT EXISTS db;");
-//                statement.execute("USE db;");
-//
-//                String createTableQuery = """
-//                    CREATE TABLE IF NOT EXISTS sales (
-//                        item_type         VARCHAR(32)     NOT NULL,
-//                        order_priority    VARCHAR(1)      NOT NULL,
-//                        order_date        VARCHAR(32)     NOT NULL,
-//                        order_id          BIGINT          NOT NULL    PRIMARY KEY,
-//                        units_sold        BIGINT          NOT NULL,
-//                        unit_price        DECIMAL(10,2)   NOT NULL,
-//                        unit_cost         DECIMAL(10,2)   NOT NULL,
-//                        total_revenue     DECIMAL(10,2)   NOT NULL,
-//                        total_cost        DECIMAL(10,2)   NOT NULL,
-//                        total_profit      DECIMAL(10,2)   NOT NULL
-//                    );
-//                """;
-//                statement.execute(createTableQuery);
-//            }
-//
-//            // Step 5: Insert records into the database
-//            String insertQuery = """
-//                INSERT INTO sales (
-//                    item_type,
-//                    order_priority,
-//                    order_date,
-//                    order_id,
-//                    units_sold,
-//                    unit_price,
-//                    unit_cost,
-//                    total_revenue,
-//                    total_cost,
-//                    total_profit
-//                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-//            """;
-//
-//            try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
-//                for (Map<String, Object> record : records) {
-//                    preparedStatement.setString(1, (String) record.get("Item Type"));
-//                    preparedStatement.setString(2, (String) record.get("Order Priority"));
-//                    preparedStatement.setString(3, (String) record.get("Order Date"));
-//                    preparedStatement.setLong(4, ((Number) record.get("Order ID")).longValue());
-//                    preparedStatement.setLong(5, ((Number) record.get("Units Sold")).longValue());
-//                    preparedStatement.setBigDecimal(6, new java.math.BigDecimal(((Number) record.get("Unit Price")).doubleValue()));
-//                    preparedStatement.setBigDecimal(7, new java.math.BigDecimal(((Number) record.get("Unit Cost")).doubleValue()));
-//                    preparedStatement.setBigDecimal(8, new java.math.BigDecimal(((Number) record.get("Total Revenue")).doubleValue()));
-//                    preparedStatement.setBigDecimal(9, new java.math.BigDecimal(((Number) record.get("Total Cost")).doubleValue()));
-//                    preparedStatement.setBigDecimal(10, new java.math.BigDecimal(((Number) record.get("Total Profit")).doubleValue()));
-//
-//                    preparedStatement.executeUpdate();
-//                }
-//            }
-//            System.out.println("Data loaded successfully!");
+           try (Statement statement = connection.createStatement()) {
+               statement.execute("DROP DATABASE IF EXISTS db;");
+               statement.execute("CREATE DATABASE IF NOT EXISTS db;");
+               statement.execute("USE db;");
+
+               String createTableQuery = """
+                   CREATE TABLE IF NOT EXISTS sales (
+                       item_type         VARCHAR(32)     NOT NULL,
+                       order_priority    VARCHAR(1)      NOT NULL,
+                       order_date        VARCHAR(32)     NOT NULL,
+                       order_id          BIGINT          NOT NULL    PRIMARY KEY,
+                       units_sold        BIGINT          NOT NULL,
+                       unit_price        DECIMAL(10,2)   NOT NULL,
+                       unit_cost         DECIMAL(10,2)   NOT NULL,
+                       total_revenue     DECIMAL(10,2)   NOT NULL,
+                       total_cost        DECIMAL(10,2)   NOT NULL,
+                       total_profit      DECIMAL(10,2)   NOT NULL
+                   );
+               """;
+               statement.execute(createTableQuery);
+           }
+
+           // Step 5: Insert records into the database
+           String insertQuery = """
+               INSERT INTO sales (
+                   item_type,
+                   order_priority,
+                   order_date,
+                   order_id,
+                   units_sold,
+                   unit_price,
+                   unit_cost,
+                   total_revenue,
+                   total_cost,
+                   total_profit
+               ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+           """;
+
+           try (PreparedStatement preparedStatement = connection.prepareStatement(insertQuery)) {
+               for (Map<String, Object> record : records) {
+                   preparedStatement.setString(1, (String) record.get("Item Type"));
+                   preparedStatement.setString(2, (String) record.get("Order Priority"));
+                   preparedStatement.setString(3, (String) record.get("Order Date"));
+                   preparedStatement.setLong(4, ((Number) record.get("Order ID")).longValue());
+                   preparedStatement.setLong(5, ((Number) record.get("Units Sold")).longValue());
+                   preparedStatement.setBigDecimal(6, new java.math.BigDecimal(((Number) record.get("Unit Price")).doubleValue()));
+                   preparedStatement.setBigDecimal(7, new java.math.BigDecimal(((Number) record.get("Unit Cost")).doubleValue()));
+                   preparedStatement.setBigDecimal(8, new java.math.BigDecimal(((Number) record.get("Total Revenue")).doubleValue()));
+                   preparedStatement.setBigDecimal(9, new java.math.BigDecimal(((Number) record.get("Total Cost")).doubleValue()));
+                   preparedStatement.setBigDecimal(10, new java.math.BigDecimal(((Number) record.get("Total Profit")).doubleValue()));
+
+                   preparedStatement.executeUpdate();
+               }
+           }
+           System.out.println("Data loaded successfully!");
         } catch (Exception e) {
             System.out.println("ERRED OUT");
             System.err.println("Database Connection Error");

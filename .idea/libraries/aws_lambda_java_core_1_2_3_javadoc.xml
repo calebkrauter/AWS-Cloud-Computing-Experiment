@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="aws-lambda-java-core-1.2.3-javadoc">
+    <CLASSES />
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/lib/aws-lambda-java-core-1.2.3-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>

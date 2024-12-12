@@ -1,4 +1,7 @@
 package java_awt;
+
+import com.amazonaws.services.lambda.runtime.Context;
+
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
@@ -6,10 +9,14 @@ import java.util.stream.*;
 
 public class Transform {
 
+    public void handleRequest(String input, Context context) {
+        Transform.main(new String[]{input});
+    }
+
     public static void main(String[] args) {
         System.out.println("1");
         try {
-            String filePath = Paths.get("data/100_Sales_Records.csv").toAbsolutePath().toString();
+            String filePath = Paths.get("dist/100_Sales_Records.csv").toAbsolutePath().toString();
             parseCSV(filePath);
             Load.loadJSONtoDB(); // Assuming this is from your previous Java file
             List<Map<String, Object>> result = fetchData();
@@ -51,7 +58,7 @@ public class Transform {
                 results.add(record);
             }
 
-            Path outputPath = Paths.get("data/transformed_100_TS.json").toAbsolutePath();
+            Path outputPath = Paths.get("/tmp/transformed_100_TS.json").toAbsolutePath();
             Files.writeString(outputPath, toJSONString(results));
 
         } catch (IOException e) {
