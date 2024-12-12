@@ -42,7 +42,7 @@ export const loadJSONtoDB = async () => {
   try {
     // Step 3: Insert records into the database
     
-    // Forcefully restart the DB (DO NOT USE WITHOUT CERTAINTY)
+    // Forcefully restart the DB (MUST USE ON LAMBDA FOR TESTING A FRESH STATE)
     const refresh = `
     DROP DATABASE db
     ;`;
