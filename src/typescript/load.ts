@@ -44,7 +44,7 @@ export const loadJSONtoDB = async () => {
     
     // Forcefully restart the DB (MUST USE ON LAMBDA FOR TESTING A FRESH STATE)
     const refresh = `
-    DROP DATABASE db
+    DROP DATABASE IF EXISTS db
     ;`;
     await connection.execute(refresh);
 
