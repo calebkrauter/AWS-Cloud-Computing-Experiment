@@ -7,6 +7,7 @@ import java.util.stream.*;
 public class Transform {
 
     public static void main(String[] args) {
+        System.out.println("1");
         try {
             String filePath = Paths.get("data/100_Sales_Records.csv").toAbsolutePath().toString();
             parseCSV(filePath);
