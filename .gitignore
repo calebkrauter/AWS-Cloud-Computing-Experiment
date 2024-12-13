@@ -6,6 +6,9 @@
 package-lock.json
 *.zip
 
+# IntelliJ customizations
+material_theme_project_new.xml
+
 # Logs
 logs
 *.log
