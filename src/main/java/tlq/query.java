@@ -1,4 +1,4 @@
-package java_awt;
+package tlq;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -76,7 +76,8 @@ public class query {
                 }
             }
         } catch (FileNotFoundException e) {
-            System.err.println(STR."Error: .env file not found: \{e.getMessage()}");
+            System.err.println("File not found: " + e.getMessage());
+            //System.err.println(STR."Error: .env file not found: \{e.getMessage()}");
         }
         return env;
     }
@@ -87,11 +88,11 @@ public class query {
             Map<String, String> db = loadEnv(".env");
             
             // Print the values to debug
-            System.out.println(STR."DB_HOST: \{db.get("DB_HOST")}");
-            System.out.println(STR."DB_USER: \{db.get("DB_USER")}");
-            System.out.println(STR."DB_PASSWORD: \{db.get("DB_PASSWORD")}");
-            System.out.println(STR."DB_NAME: \{db.get("DB_NAME")}");
-            System.out.println(STR."DB_PORT: \{db.get("DB_PORT")}");
+//            System.out.println(STR."DB_HOST: \{db.get("DB_HOST")}");
+//            System.out.println(STR."DB_USER: \{db.get("DB_USER")}");
+//            System.out.println(STR."DB_PASSWORD: \{db.get("DB_PASSWORD")}");
+//            System.out.println(STR."DB_NAME: \{db.get("DB_NAME")}");
+//            System.out.println(STR."DB_PORT: \{db.get("DB_PORT")}");
             
             DB_HOST = db.get("DB_HOST");
             DB_USER = db.get("DB_USER");
@@ -106,7 +107,8 @@ public class query {
             System.out.println("DB_URL: " + DB_URL);
             
         } catch (IOException e) {
-            System.err.println(STR."Error loading database configuration: \{e.getMessage()}");
+            System.err.println("Error loading DB: " + e.getMessage());
+            //System.err.println(STR."Error loading database configuration: \{e.getMessage()}");
         }
     }
 

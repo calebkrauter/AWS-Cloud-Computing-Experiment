@@ -1,15 +1,12 @@
-package java_awt;
-
-import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.RequestHandler;
+package tlq;
 
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.stream.*;
-public class transform implements RequestHandler<String, String> {
+public class transform {
 
-   public void handleRequest(String input, Context context) {
+   public void handleRequest() {
        transform.main(new String[]{});
    }
 

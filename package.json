@@ -14,7 +14,7 @@
     "build": "tsc",
     "start": "node dist/typescript/transform.js && node dist/typescript/load.js && node dist/typescript/query.js",
     "dev": "ts-node src/typescript/transform.ts && ts-node src/typescript/load.ts && ts-node src/typescript/query.ts",
-    "compile-Java": "javac --release 21 -d dist/ src/java_awt/*.java",
+    "compile-Java": "javac --release 21 -d dist/ src/java/*.java",
     "run-java": "java -cp lib/:mysql-connector-j-9.1.0.jar java_awt.Transform"
 
   }

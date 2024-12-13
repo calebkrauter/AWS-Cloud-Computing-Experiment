@@ -1,4 +1,4 @@
-package java_awt;
+package tlq;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
