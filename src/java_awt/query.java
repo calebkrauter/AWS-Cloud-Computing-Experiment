@@ -12,7 +12,7 @@ import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Query {
+public class query {
     // Database configuration (initialized in loadDB method)
     private static String DB_HOST;
     private static String DB_USER;
@@ -76,7 +76,7 @@ public class Query {
                 }
             }
         } catch (FileNotFoundException e) {
-            System.err.println("Error: .env file not found: " + e.getMessage());
+            System.err.println(STR."Error: .env file not found: \{e.getMessage()}");
         }
         return env;
     }
@@ -84,14 +84,14 @@ public class Query {
     // Method to load database credentials from the .env file
     public static void loadDB() {
         try {
-            Map<String, String> db = loadEnv("AWS-Cloud-Computing-Experiment/.env");
+            Map<String, String> db = loadEnv(".env");
             
             // Print the values to debug
-            System.out.println("DB_HOST: " + db.get("DB_HOST"));
-            System.out.println("DB_USER: " + db.get("DB_USER"));
-            System.out.println("DB_PASSWORD: " + db.get("DB_PASSWORD"));
-            System.out.println("DB_NAME: " + db.get("DB_NAME"));
-            System.out.println("DB_PORT: " + db.get("DB_PORT"));
+            System.out.println(STR."DB_HOST: \{db.get("DB_HOST")}");
+            System.out.println(STR."DB_USER: \{db.get("DB_USER")}");
+            System.out.println(STR."DB_PASSWORD: \{db.get("DB_PASSWORD")}");
+            System.out.println(STR."DB_NAME: \{db.get("DB_NAME")}");
+            System.out.println(STR."DB_PORT: \{db.get("DB_PORT")}");
             
             DB_HOST = db.get("DB_HOST");
             DB_USER = db.get("DB_USER");
@@ -106,7 +106,7 @@ public class Query {
             System.out.println("DB_URL: " + DB_URL);
             
         } catch (IOException e) {
-            System.err.println("Error loading database configuration: " + e.getMessage());
+            System.err.println(STR."Error loading database configuration: \{e.getMessage()}");
         }
     }
 
